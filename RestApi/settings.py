@@ -11,7 +11,8 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
-
+import os
+# print (environ.get('APP_DB_ENGINE'))
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -20,12 +21,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '9u8l(cl7qt5=775rrx*ly)k@%ko2i0o*9br48l=v#_t^lwsn5@'
+SECRET_KEY = os.environ.get('APP_SECRET_KEY', 'unsafe-secret-key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DJANGO_DEBUG', "True") == "True"
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', '').split()
 
 
 # Application definition
@@ -79,12 +80,13 @@ WSGI_APPLICATION = 'RestApi.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'django-api',
-        'USER': 'uday',
-        'PASSWORD': 'Uday@1256',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
+        'ENGINE': os.environ.get('APP_DB_ENGINE', ''),
+        'NAME': os.environ.get('DB_NAME', 'db.sqlite'),
+        'USER': os.environ.get('DB_USER', ''),
+        'PASSWORD': os.environ.get('DB_PASSWORD', ''),
+        'HOST': os.environ.get('DB_HOST', None),
+        'PORT': os.environ.get('DB_PORT', None),
+        'CONN_MAX_AGE': 600,
     }
 }
 
